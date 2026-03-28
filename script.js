@@ -1,80 +1,41 @@
-// Wait for full DOM load
-document.addEventListener("DOMContentLoaded", () => {
-  console.log("🍸 Elite Bartender Website Ready");
+document.addEventListener("DOMContentLoaded", function () {
 
-  initSmoothScroll();
-  initScrollAnimations();
-  initButtonEffects();
-});
-
-/* =========================
-   🌊 Smooth Scroll (Improved)
-========================= */
-function initSmoothScroll() {
-  document.querySelectorAll('a[href^="#"]').forEach(link => {
-    link.addEventListener("click", e => {
-      const targetId = link.getAttribute("href");
-
-      // Skip empty links
-      if (!targetId || targetId === "#") return;
-
-      const target = document.querySelector(targetId);
-      if (!target) return;
-
-      e.preventDefault();
-
-      target.scrollIntoView({
-        behavior: "smooth",
-        block: "start"
-      });
+  /* Smooth Scroll */
+  document.querySelectorAll('a[href^="#"]').forEach(function(link) {
+    link.addEventListener("click", function(e) {
+      var target = document.querySelector(this.getAttribute("href"));
+      if (target) {
+        e.preventDefault();
+        target.scrollIntoView({ behavior: "smooth" });
+      }
     });
   });
-}
 
-/* =========================
-   ✨ Scroll Animations (Optimized)
-========================= */
-function initScrollAnimations() {
-  const elements = document.querySelectorAll("section, .card");
+  /* Animation */
+  var elements = document.querySelectorAll("section, .card, h1, p, img");
 
-  // Add hidden class initially
-  elements.forEach(el => el.classList.add("hidden"));
+  elements.forEach(function(el) {
+    el.classList.add("hidden");
+  });
 
-  const observer = new IntersectionObserver(
-    entries => {
-      entries.forEach(entry => {
+  if ('IntersectionObserver' in window) {
+    var observer = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
         if (entry.isIntersecting) {
           entry.target.classList.add("show");
-          observer.unobserve(entry.target); // Run only once
         }
       });
-    },
-    {
-      threshold: 0.15,
-      rootMargin: "0px 0px -50px 0px"
-    }
-  );
-
-  elements.forEach(el => observer.observe(el));
-}
-
-/* =========================
-   🔘 Button Click Effect (Smooth)
-========================= */
-function initButtonEffects() {
-  document.querySelectorAll(".btn").forEach(btn => {
-    btn.addEventListener("click", () => {
-      btn.animate(
-        [
-          { transform: "scale(1)" },
-          { transform: "scale(0.92)" },
-          { transform: "scale(1)" }
-        ],
-        {
-          duration: 200,
-          easing: "ease-out"
-        }
-      );
     });
-  });
-}
+
+    elements.forEach(function(el) {
+      observer.observe(el);
+    });
+
+  } else {
+    // Fallback for older browsers
+    elements.forEach(function(el) {
+      el.classList.add("show");
+    });
+  }
+
+});
