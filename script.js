@@ -1,41 +1,28 @@
-document.addEventListener("DOMContentLoaded", function () {
+// Cocktail dynamic page
+const params = new URLSearchParams(window.location.search);
+const name = params.get("name");
 
-  /* Smooth Scroll */
-  document.querySelectorAll('a[href^="#"]').forEach(function(link) {
-    link.addEventListener("click", function(e) {
-      var target = document.querySelector(this.getAttribute("href"));
-      if (target) {
-        e.preventDefault();
-        target.scrollIntoView({ behavior: "smooth" });
-      }
-    });
-  });
+if(name){
+  const title = document.getElementById("title");
+  const video = document.getElementById("video");
+  const list = document.getElementById("ingredients");
 
-  /* Animation */
-  var elements = document.querySelectorAll("section, .card, h1, p, img");
+  if(title) title.innerText = name;
 
-  elements.forEach(function(el) {
-    el.classList.add("hidden");
-  });
-
-  if ('IntersectionObserver' in window) {
-    var observer = new IntersectionObserver(function(entries) {
-      entries.forEach(function(entry) {
-        if (entry.isIntersecting) {
-          entry.target.classList.add("show");
-        }
-      });
-    });
-
-    elements.forEach(function(el) {
-      observer.observe(el);
-    });
-
-  } else {
-    // Fallback for older browsers
-    elements.forEach(function(el) {
-      el.classList.add("show");
-    });
+  if(video){
+    video.src = "https://www.w3schools.com/html/mov_bbb.mp4";
   }
 
-});
+  const items = [
+    "Vodka","Lime","Mint","Sugar",
+    "Ice","Soda","Salt","Fruit Garnish"
+  ];
+
+  if(list){
+    items.forEach(i=>{
+      let li = document.createElement("li");
+      li.innerText = i;
+      list.appendChild(li);
+    });
+  }
+}
